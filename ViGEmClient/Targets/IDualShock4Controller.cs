@@ -43,5 +43,24 @@ namespace Nefarius.ViGEm.Client.Targets
         /// <returns>The output report buffer.</returns>
         [UsedImplicitly]
         IEnumerable<byte> AwaitRawOutputReport(int timeout, out bool timedOut);
+
+        [UsedImplicitly]
+        void SetButtonsFull(ushort buttons);
+
+        [UsedImplicitly]
+        void SetSpecialButtonsFull(byte buttons);
+
+        [UsedImplicitly]
+        ref byte LeftTrigger { get; }
+        [UsedImplicitly]
+        ref byte RightTrigger { get; }
+        [UsedImplicitly]
+        ref byte LeftThumbX { get; }
+        [UsedImplicitly]
+        ref byte LeftThumbY { get; }
+        [UsedImplicitly]
+        ref byte RightThumbX { get; }
+        [UsedImplicitly]
+        ref byte RightThumbY { get; }
     }
 }
