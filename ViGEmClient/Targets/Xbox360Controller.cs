@@ -94,7 +94,7 @@ namespace Nefarius.ViGEm.Client.Targets
             };
 
             var error = ViGEmClient.vigem_target_x360_register_notification(Client.NativeHandle, NativeHandle,
-                _notificationCallback);
+                _notificationCallback, System.IntPtr.Zero);
 
             switch (error)
             {

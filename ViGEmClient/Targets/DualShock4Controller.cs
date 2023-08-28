@@ -93,7 +93,7 @@ namespace Nefarius.ViGEm.Client.Targets
                     new LightbarColor(color.Red, color.Green, color.Blue)));
 
             var error = ViGEmClient.vigem_target_ds4_register_notification(Client.NativeHandle, NativeHandle,
-                _notificationCallback);
+                _notificationCallback, System.IntPtr.Zero);
 
             switch (error)
             {
