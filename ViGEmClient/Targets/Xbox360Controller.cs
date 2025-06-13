@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
+﻿using System;
+using System.Collections.Generic;
 
 using Nefarius.ViGEm.Client.Exceptions;
 using Nefarius.ViGEm.Client.Targets.Xbox360;
@@ -59,6 +57,10 @@ internal partial class Xbox360Controller : ViGEmTarget, IXbox360Controller
     public Xbox360Controller(ViGEmClient client) : base(client)
     {
         NativeHandle = ViGEmClient.vigem_target_x360_alloc();
+        if (NativeHandle == IntPtr.Zero)
+        {
+            throw new VigemAllocFailedException();
+        }
     }
 
     /// <inheritdoc />
@@ -76,7 +78,6 @@ internal partial class Xbox360Controller : ViGEmTarget, IXbox360Controller
         ProductId = productId;
     }
 
-    [SuppressMessage("ReSharper", "SwitchStatementHandlesSomeKnownEnumValuesWithDefault")]
     public override void Connect()
     {
         base.Connect();
@@ -96,19 +97,7 @@ internal partial class Xbox360Controller : ViGEmTarget, IXbox360Controller
             NativeHandle,
             _notificationCallback);
 
-        switch (error)
-        {
-            case ViGEmClient.VIGEM_ERROR.VIGEM_ERROR_NONE:
-                break;
-            case ViGEmClient.VIGEM_ERROR.VIGEM_ERROR_BUS_NOT_FOUND:
-                throw new VigemBusNotFoundException();
-            case ViGEmClient.VIGEM_ERROR.VIGEM_ERROR_INVALID_TARGET:
-                throw new VigemInvalidTargetException();
-            case ViGEmClient.VIGEM_ERROR.VIGEM_ERROR_CALLBACK_ALREADY_REGISTERED:
-                throw new VigemCallbackAlreadyRegisteredException();
-            default:
-                throw new Win32Exception(Marshal.GetLastWin32Error());
-        }
+        ViGEmClient.CheckError(error);
     }
 
     public override void Disconnect()
@@ -177,24 +166,10 @@ internal partial class Xbox360Controller : ViGEmTarget, IXbox360Controller
     ///     Submits a new (or modified) report to the emulation bus.
     /// </summary>
     /// <param name="report">The report to submit.</param>
-    [SuppressMessage("ReSharper", "SwitchStatementHandlesSomeKnownEnumValuesWithDefault")]
     private void SubmitNativeReport(ViGEmClient.XUSB_REPORT report)
     {
         ViGEmClient.VIGEM_ERROR error = ViGEmClient.vigem_target_x360_update(Client.NativeHandle, NativeHandle, report);
-
-        switch (error)
-        {
-            case ViGEmClient.VIGEM_ERROR.VIGEM_ERROR_NONE:
-                break;
-            case ViGEmClient.VIGEM_ERROR.VIGEM_ERROR_BUS_INVALID_HANDLE:
-                throw new VigemBusInvalidHandleException();
-            case ViGEmClient.VIGEM_ERROR.VIGEM_ERROR_INVALID_TARGET:
-                throw new VigemInvalidTargetException();
-            case ViGEmClient.VIGEM_ERROR.VIGEM_ERROR_BUS_NOT_FOUND:
-                throw new VigemBusNotFoundException();
-            default:
-                throw new Win32Exception(Marshal.GetLastWin32Error());
-        }
+        ViGEmClient.CheckError(error);
     }
 }
 
