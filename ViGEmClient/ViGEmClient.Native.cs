@@ -33,6 +33,7 @@ namespace Nefarius.ViGEm.Client
             VIGEM_ERROR_NOT_SUPPORTED = 0xE0000016,
             VIGEM_ERROR_WINAPI = 0xE0000017,
             VIGEM_ERROR_TIMED_OUT = 0xE0000018,
+            VIGEM_ERROR_DEVICE_NOT_READY = 0xE0000019,
         }
 
         [StructLayout(LayoutKind.Sequential)]

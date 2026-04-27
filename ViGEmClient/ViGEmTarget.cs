@@ -65,13 +65,15 @@ namespace Nefarius.ViGEm.Client
                     throw new VigemAlreadyConnectedException();
                 case ViGEmClient.VIGEM_ERROR.VIGEM_ERROR_NO_FREE_SLOT:
                     throw new VigemNoFreeSlotException();
+                case ViGEmClient.VIGEM_ERROR.VIGEM_ERROR_DEVICE_NOT_READY:
+                    throw new VigemDeviceNotReadyException();
                 default:
                     throw new Win32Exception(Marshal.GetLastWin32Error());
             }
         }
 
         /// <summary>
-        ///     Takes this device offline by removing it from the bus.
+        ///     Takes this device offline
         /// </summary>
         public virtual void Disconnect()
         {
